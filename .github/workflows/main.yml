@@ -29,9 +29,9 @@ jobs:
           # Restart the Remote Desktop service to ensure changes take effect
           Restart-Service -Name TermService -Force
 
-      - name: Create RDP User with Fixed Password
+      - name: Create RDP User
         run: |
-          $password = "Momi@123456"   # Fixed password (valid for Windows policy)
+          $password = "${{ secrets.RDP_PASSWORD }}"   # Get password from GitHub Secret
           $securePass = ConvertTo-SecureString $password -AsPlainText -Force
           
           if (-not (Get-LocalUser -Name "RDP" -ErrorAction SilentlyContinue)) {
@@ -88,7 +88,7 @@ jobs:
           Write-Host "`n=== RDP ACCESS ==="
           Write-Host "Address: $env:TAILSCALE_IP"
           Write-Host "Username: RDP"
-          Write-Host "Password: Momi@123456"
+          Write-Host "Password: (check your GitHub Secret: RDP_PASSWORD)"
           Write-Host "==================`n"
           
           while ($true) {
