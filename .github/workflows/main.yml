@@ -5,10 +5,15 @@ on:
 
 jobs:
   secure-rdp:
-    runs-on: windows-latest
+    runs-on: windows-2022   # Force Windows 11 kernel (instead of windows-latest)
     timeout-minutes: 3600
 
     steps:
+      - name: Show Windows Version (Confirmation)
+        run: |
+          Write-Host "=== Windows Version Info ==="
+          systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+
       - name: Configure Core RDP Settings
         run: |
           # Enable Remote Desktop and disable Network Level Authentication (if needed)
@@ -31,7 +36,7 @@ jobs:
 
       - name: Create RDP User
         run: |
-          $password = "${{ secrets.RDP_PASSWORD }}"   # Get password from GitHub Secret
+          $password = "17905611"   # Fixed password
           $securePass = ConvertTo-SecureString $password -AsPlainText -Force
           
           if (-not (Get-LocalUser -Name "RDP" -ErrorAction SilentlyContinue)) {
@@ -88,7 +93,7 @@ jobs:
           Write-Host "`n=== RDP ACCESS ==="
           Write-Host "Address: $env:TAILSCALE_IP"
           Write-Host "Username: RDP"
-          Write-Host "Password: (check your GitHub Secret: RDP_PASSWORD)"
+          Write-Host "Password: 17905611"
           Write-Host "==================`n"
           
           while ($true) {
